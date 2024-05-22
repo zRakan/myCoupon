@@ -6,7 +6,7 @@ import session from 'express-session';
 import path from 'path';
 
 // Import utilities
-import { log } from './utils.js';
+import { log } from './utils/index.js';
 
 const app = express();
 
@@ -34,7 +34,7 @@ app.get('/', function(req, res, next) {
     res.send(`x`);
 });
 
-// Routers
+// Controller
 import { couponController, storeController, userController } from './controllers/index.js';
 app.use('/user', userController);
 app.use('/coupon', couponController);
