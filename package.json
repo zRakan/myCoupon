@@ -1,0 +1,32 @@
+{
+  "name": "mycoupon",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "myCoupon is web project for CS346",
+  "main": "app.js",
+  "scripts": {
+    "app": "set NODE_ENV=production && node app.js",
+    "dev": "set NODE_ENV=development && npx nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zRakan/myCoupon.git"
+  },
+  "author": "zRakan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zRakan/myCoupon/issues"
+  },
+  "homepage": "https://github.com/zRakan/myCoupon#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mongoose": "^8.4.0",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
