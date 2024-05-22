@@ -1,4 +1,3 @@
-
 export default function(req, res, next) {
     const session = req.session;
     

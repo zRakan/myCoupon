@@ -1,20 +1,17 @@
 import { Router } from 'express';
 import { Store } from '../models/index.js';
 
-import { isAdmin } from '../utils/index.js';
+import { isAdmin, apiResp } from '../utils/index.js';
 
 export const storeController = Router();
 
 function checkInputs(req, res, next) {
     const body = req.body;
 
-    if(req.url == '/create') {
-        if(body.name && body.img) return next();
-    } else if(req.url == '/remove') {
-        if(body.id) return next();
-    }
+    if(req.url == '/create' && body.name && body.img) return next();
+    else if(req.url == '/remove' && body.id) return next();
 
-    return res.status(403).send({ status: "error", message: "Invalid data" });
+    return apiResp["INVALID_DATA"](res);
 }
 
 storeController.post('/create', checkInputs, isAdmin, async function(req, res) {
@@ -30,7 +27,7 @@ storeController.post('/create', checkInputs, isAdmin, async function(req, res) {
 
         return res.json(store);
     } catch(err) {
-        return res.status(403).send({ status: "error", message: "Invalid data" });
+        return apiResp["INVALID_DATA"](res);
     }
 });
 
@@ -39,10 +36,10 @@ storeController.post('/remove', checkInputs, isAdmin, async function(req, res) {
 
     try {
         const removed = await Store.deleteOne({ id: body.id });
-        if(!removed || removed.deletedCount == 0) return res.status(403).send({ status: "error", message: "Store not found" });
+        if(!removed || removed.deletedCount == 0) return apiResp["STORE_NOT_FOUND"](res);
 
         res.json(removed);
     } catch(err) {
-        return res.status(403).send({ status: "error", message: "Invalid data" });
+        return apiResp["INVALID_DATA"](res);
     }
 });
