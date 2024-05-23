@@ -30,6 +30,10 @@ const couponsSchema = new Schema({
     accepted: {
         type: Boolean,
         default: false
+    },
+
+    addedBy: {
+        type: String
     }
 });
 
