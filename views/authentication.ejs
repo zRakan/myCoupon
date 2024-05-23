@@ -1,0 +1,184 @@
+<%- include('./header.ejs'); %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+
+    <section>
+        <style>
+            #login-container > h1 {
+                font-size: 32px;
+            }
+
+            #login-container, #register-container {
+                width: 350px;
+                height: 450px;
+
+                border-radius: 10px;
+
+                background-color: white;
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #login-elements {
+                margin-top: 50px;
+
+                display: flex;
+                flex-direction: column;
+
+                row-gap: 30px;
+
+                width: 90%;
+            }
+
+            #username-container, #password-container {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #login-elements > input[type="submit"] {
+                margin: 0 auto;
+                width: auto;
+            }
+
+            #register-container {
+                display: none;
+            }
+
+            #email-container {
+                display: none;
+                justify-content: space-between;
+            }
+
+            #inputSwitcher {
+                cursor: pointer;
+
+                text-decoration: underline;
+                font-weight: bold;
+
+                transition: color 0.3s linear;
+                color: black;
+
+                width: fit-content;
+            }
+
+            #inputSwitcher:hover {
+                color: #76ABAE;
+            }
+            
+        </style>
+
+        <div class="center">
+            <div id="login-container">
+                <h1 id="form-title">تسجيل الدخول</h1>
+
+                <form id="login-elements" method="POST">
+                    <div id="username-container">
+                        <label>اسم المستخدم</label>
+                        <input type="text" placeholder="اسم المُستخدم" required>
+                    </div>
+
+                    <div id="email-container">
+                        <label>الإيميل</label>
+                        <input dir="ltr" type="email" placeholder="test@mail.com">
+                    </div>
+
+                    <div id="password-container">
+                        <label>كلمة المرور</label>
+                        <input type="password" placeholder="كلمة المرور" required>
+                    </div>
+
+                    <p id="inputSwitcher">ليس لديك حساب؟</p>
+
+                    <input type="submit" value="تسجيل الدخول" > 
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Notification-->
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputSwitcher = document.querySelector("#inputSwitcher");
+
+            const titleForm = document.querySelector("#form-title");
+            const loginContainer = document.querySelector("#login-container");
+            const emailContainer = document.querySelector("#email-container");
+            const formContainer = document.querySelector("#login-elements");
+            const submitBtn = document.querySelector("#login-elements > input[type='submit']");
+
+            const usernameInput = document.querySelector("#username-container > input");
+            const passwordInput = document.querySelector("#password-container > input");
+            const emailInput = document.querySelector("#email-container > input");
+
+            let login = true;
+            function switchForm() {
+                login = !login;
+                
+                titleForm.innerHTML = login ? "تسجيل دخول" : "تسجيل حساب جديد";
+                inputSwitcher.innerHTML = login ? "ليس لديك حساب؟" : "لدي حساب!";
+                submitBtn.value = login ? "تسجيل الدخول" : "تسجيل حساب";
+
+                emailContainer.style.display = login ? 'none' : 'flex';
+
+                usernameInput.value = '';
+                passwordInput.value = '';
+                emailInput.value = '';
+            }
+
+            if(window.location.pathname == '/register') switchForm();
+
+            inputSwitcher.addEventListener("click", switchForm);
+
+            formContainer.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                if(login) {
+                    let resp = await fetch('/user/login', {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+
+                        body: JSON.stringify({ username: usernameInput.value, password: passwordInput.value })
+                    });
+
+                    resp = await resp.json();
+
+                    if(resp.status == 'error') return showNotification(resp.message, 'failed');
+                    else {
+                        showNotification("تم تسجيل دخولك بنجاح", "success");
+                        setTimeout(function() {
+                            window.location = '/'
+                        }, 1500)
+                    }
+
+                } else {
+
+                    let resp = await fetch('/user/register', {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+
+                        body: JSON.stringify({ username: usernameInput.value, email: emailInput.value, password: passwordInput.value })
+                    });
+                    
+                    resp = await resp.json();
+
+                    if(resp.status == 'error') return showNotification(resp.message, 'failed');
+                    else {
+                        showNotification("تم تسجيل حسابك بنجاح", "success");
+                        switchForm();
+                    }
+
+                }
+            });
+
+            
+        });
+    </script>
+</body>
+
+<%- include('./footer.ejs') %>

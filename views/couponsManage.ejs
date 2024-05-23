@@ -1,0 +1,114 @@
+<%- include('./header.ejs') %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+
+    <section>
+        <style>
+            #coupons-list {
+                display: flex;
+                flex-direction: column;
+
+                row-gap: 20px;
+            }
+
+            #coupon-info {
+                width: 600px;
+                height: 150px;
+
+                background-color: white;
+
+                border-radius: 30px;
+
+                transition: opacity 0.3s;
+                opacity: 0.8;
+
+                display: flex;
+                column-gap: 20px;
+            }
+
+            #coupon-info:hover {
+                cursor: pointer;
+                opacity: 1;
+            }
+
+            #coupon-info p {
+                align-self: center;
+                
+                text-align: center;
+                margin: auto;
+
+                color: black;
+            }
+
+            #coupon-info img {
+                border-radius: 20px;
+            }
+
+            #percentage {                
+                margin-top: 20px;
+
+                margin-left: 20px;
+                margin-right: auto;
+
+                width: 100px;
+                height: 70%;
+
+                border-radius: 15px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                color: white;
+                background-color: #76ABAE;
+            }
+
+            #percentage > span {
+                padding-bottom: 10px;
+
+                font-size: 3rem;
+            }
+
+            #greeting-user {
+                color: white;
+
+                font-size: 28px;
+                padding-right: 10px;
+            }
+
+            #control-title {
+                color: white;
+            }
+        </style>
+
+        <p id="greeting-user">اهلًا بك، <span style="font-weight: bold;"><%= user.name || "زائر" %></span></p>
+
+        <div class="center">
+            <h1 id="control-title">لوحة التحكم</h1>
+
+            <div id="couponList">
+                <% if(couponsList.length > 0) { %>
+                    <div id="coupons-list">
+                        <% for(let coupon of couponsList) { %>
+                            <div id="coupon-info" data-coupon="<%=coupon.code%>">
+                                <img src="<%= stores[coupon.belongs].img %>">
+                                
+                                <p>"<%= coupon.description || "لا يوجد وصف لكوبون الخصم" %>"
+                                <br>الكوبون من قِبل: <span style="font-weight: bold;"><%= coupon.addedBy %></span></p>
+
+                                <div id="percentage">
+                                    <span><%= coupon.percentage %>%</span>
+                                </div>
+    
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <p>لا توجد كوبونات خصم يُمكن قبولها او رفضها حاليًا...</p>
+                <% } %>
+            </div>
+        </div>
+
+    </section>
+</body>

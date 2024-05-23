@@ -1,0 +1,59 @@
+<section>
+    <style>
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+        #nav {            
+            display: flex;
+            justify-content: space-between;
+    
+            padding-left: 20px;
+            padding-right: 20px;
+
+            width: 100%;
+    
+            margin-bottom: 50px;
+
+            background-color: #222831;
+            color: white;
+
+            transition: all 0s ease-in;
+        }
+
+        #logo {
+            width: 200px;
+        }
+    
+        #elements {
+            display: flex;
+            align-items: center;
+            column-gap: 10px;
+        }
+    
+        p a, a i {
+            transition: color 0.3s;
+        }
+
+        p a:hover, a i:hover {
+            color: #76ABAE;
+        }
+    </style>
+
+    <div id="nav">
+        <a href="/"><img id="logo" src="/static/assets/logo.png"></a>
+
+        <div id="elements">
+            <a href="/"><i class="bi bi-house-door-fill" style="font-size: 32px;"></i></a>
+            
+            <% if(user.loggedIn) { %>
+                <% if(user.role == 'admin') { %>
+                    <a href="/couponsList"><i class="bi bi-shield-fill-check" style="font-size: 32px"></i></a>
+                <% } %>
+
+                <p style="color: red;"><a href="/logout">تسجيل الخروج</a></p>
+            <% } else { %>
+                <p><a href="/login">تسجيل الدخول</a></p>
+            <% } %>
+
+        </div>
+
+    </div>
+</section>

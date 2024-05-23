@@ -1,0 +1,150 @@
+<%- include('./header.ejs') %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+    
+    <section>
+        <style>
+            @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+            
+            #store-container {                
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
+
+                text-align: center;
+
+                width: 800px;
+
+                color: white;
+            }
+
+            #store-container > p {
+                font-size: 30px;
+            }
+
+            #store-elements {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                border-radius: 10px;
+                background-color: #EEEEEE;
+            }
+
+            #store-element {
+                display: flex;
+                align-items: center;
+                
+                width: 100%;
+                height: 100px;
+            }
+
+            #store-element img {
+                position: absolute;
+                right: 5px;
+
+                border-radius: 20px;
+                width: 80px;
+            }
+
+            #store-element p {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+
+                color: black;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            #actions {
+                position: absolute;
+                left: 5px;
+            }
+
+            #store-element i {
+                color: black;
+            }
+
+            #greeting-user {
+                color: white;
+
+                font-size: 28px;
+                padding-right: 10px;
+            }
+        </style>
+
+
+        <p id="greeting-user">اهلًا بك، <span style="font-weight: bold;"><%= user.name || "زائر" %></span></p>
+        <div id="store-container">
+            <p>قائمة المتاجر</p>
+
+            <% if(stores.length > 0) { %>
+                <div id="store-elements">
+                    <% for(let element of stores) { %>
+                    <div id="store-element">
+                        <img src="<%= element.img %>">
+                        <p><%= element.name %></p>
+                        
+                        <div id="actions" data-id="<%= element.id %>">
+                            <% if(user.role == 'admin') { %>
+                                <a href="#"><i id="edit-store" class="bi bi-pencil-square" style="color: orange; font-size: 40px;"></i></a>
+                                <a href="#"><i id="remove-store" class="bi bi-trash3" style="color: darkred; font-size: 40px;"></i></a>
+                            <% } %>
+
+                            <a href="/coupons/<%= element.id %>"><i class="bi-eye" style="font-size: 40px;"></i></a>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+            <% } else { %>
+                <p style="font-size: 12px;">لا توجد متاجر متّاحة حاليًا...</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Notifications -->
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const removeStore = document.querySelectorAll("#remove-store");
+
+            let sure = false;
+            let interval
+
+            for(let removeBtn of removeStore) {
+                const elementId = (removeBtn.parentElement.parentElement).getAttribute('data-id');
+
+                removeBtn.addEventListener('click', async function() {
+
+                    if(!sure) {
+                        sure = true;
+                        interval = setTimeout(function() {
+                            sure = false;
+                        }, 1500)
+
+                        return showNotification("هل انت متأكد؟ قم بالنقر على الزر مرة اخرى", "warning")
+                    }
+
+                    clearInterval(interval);
+                    interval = null;
+
+                    let resp = await fetch('/store/remove', {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+
+                        body: JSON.stringify({ id: elementId }),
+                    });
+
+                        resp = await resp.json();
+                        if(resp.status == 'error') return showNotification(resp.message, 'failed');
+                        else {
+                            window.location = '/';
+                        }
+                });
+            }
+        });
+    </script>
+</body>

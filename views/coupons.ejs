@@ -1,0 +1,139 @@
+<%- include('./header.ejs') %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+
+    <section>
+        <style>
+            #coupons-list {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                row-gap: 20px;
+            }
+
+            #store-container {
+                display: flex;
+                align-items: center;
+
+                flex-direction: column;
+            }
+
+            #store-container p {
+                font-weight: bold;
+            }
+
+            #store-container img {
+                border-radius: 20px;
+                width: 100px;
+            }
+
+            #coupon-info {
+                width: 500px;
+                height: 150px;
+
+                background-color: white;
+
+                border-radius: 30px;
+
+                transition: opacity 0.3s;
+                opacity: 0.8;
+
+                display: flex;
+                column-gap: 20px;
+            }
+
+            #coupon-info:hover {
+                cursor: pointer;
+                opacity: 1;
+            }
+
+            #coupon-info p {
+                align-self: center;
+                color: black;
+            }
+
+            #percentage {
+                margin-top: 20px;
+                margin-right: 20px;
+
+                width: 100px;
+                height: 70%;
+
+                border-radius: 15px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                color: white;
+                background-color: #76ABAE;
+            }
+
+            #percentage > span {
+                padding-bottom: 10px;
+
+                font-size: 3rem;
+            }
+        </style>
+
+        <div class="center">
+            <div id="store-container">
+                <img src="<%=store.img%>">
+                <p><%= store.name %><br>عدد الكوبونات: <%= coupons.length %></p>
+            </div>
+
+            <% if(coupons.length > 0) { %>
+                <div id="coupons-list">
+                    <% for(let coupon of coupons) { %>
+                        <div id="coupon-info" data-coupon="<%=coupon.code%>">
+                            <div id="percentage">
+                                <span><%= coupon.percentage %>%</span>
+                            </div>
+
+                            <p><%= coupon.description || "لا يوجد وصف لكوبون الخصم" %></p>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else { %>
+                <p>لا توجد كوبونات خصم متّاحة للمتجر حاليًا...</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Notifications -->
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        function copyToClipboard(txt) {
+            const el = document.createElement('textarea');  
+            el.setAttribute('readonly', ''); el.style.position = 'absolute'; el.style.left = '-9999px';
+            
+            el.value = txt;
+            
+            document.body.appendChild(el);   
+
+            const selected = document.getSelection().rangeCount > 0  ? document.getSelection().getRangeAt(0) : false;                                    
+            el.select();                                    
+            document.execCommand('copy');                   
+            document.body.removeChild(el);
+
+            if (selected) {                                 
+                document.getSelection().removeAllRanges();    
+                document.getSelection().addRange(selected);   
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const couponsList = document.querySelectorAll('#coupon-info');
+
+            for(let couponElement of couponsList) {
+                couponElement.addEventListener('click', function() {
+                    copyToClipboard(couponElement.getAttribute('data-coupon'));
+                    showNotification("تم نسخ كوبون الخصم بنجاح", 'success');
+                });
+            }
+        });
+    </script>
+</body>

@@ -1,0 +1,139 @@
+/*
+    CSS Reset
+*/
+
+/* Box sizing rules */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+
+    background-color: #31363F;
+}
+
+/* Make images easier to work with */
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input, button, textarea, select {
+  font: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+p {
+    color: white;
+}
+
+/*
+    Style
+*/
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Notification System */
+.notification-container {
+    direction: ltr;
+
+    position: fixed;
+    
+    left: 5%;
+    top: 10%;
+
+    width: 300px;
+
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 10px;
+}
+
+#notification-message {
+    position: relative;
+
+    background-color: #ebebeb;
+    border: 1px solid;
+
+
+    border-radius: 10px;
+    height: 60px;
+
+    font-size: 16px;
+
+    left: -100%;
+    /* To: left: 0%
+    /* Transition */
+    transition: left 0.5s linear;
+}
+
+/* SVG Notification */
+#notification-message > svg {
+    position: relative;
+
+    width: 32px;
+    height: 32px;
+
+    top: 20%;
+    left: 10px;
+}
+
+#notification-message > span {
+    position: absolute;
+
+    top: 20%;
+    right: 10px;
+
+    direction: rtl;
+
+    font-family: 'montaser';
+    font-size: 14px;
+
+    width: 70%;
+}
+
+
+
+/* Successfull Notification */
+#notification-message.success {
+    background-color: #EAF7EE;
+    border-color: #3FBD63;
+}
+
+#notification-message.success > svg {
+    color: #3FBD63;
+}
+
+/* Failed notificaton */
+#notification-message.failed {
+    background-color: #fcede9;
+    border-color: #ec4c2c;
+}
+
+#notification-message.failed > svg {
+    color: #ec4c2c;
+}
+
+/* Warning notification */
+#notification-message.warning {
+    background-color: #fef7ea;
+    border-color: #ed9400;
+}
+
+#notification-message.warning > svg {
+    color: #ed9400;
+}
