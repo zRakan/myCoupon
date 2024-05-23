@@ -43,11 +43,20 @@ userSchema.statics.findUser = async function(username) {
 /**
  * Check if email is taken
  * @param {string} email - The user's email
- * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
-userSchema.statics.emailTaken = async function(email, excludeUserId) {
-    const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+userSchema.statics.emailTaken = async function(email) {
+    const user = await this.findOne({ email });
+    return !!user;
+};
+
+/**
+ * Check if username is taken
+ * @param {string} username - The user's email
+ * @returns {Promise<boolean>}
+ */
+userSchema.statics.usernameTaken = async function(username) {
+    const user = await this.findOne({ username });
     return !!user;
 };
   

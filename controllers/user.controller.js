@@ -25,6 +25,9 @@ userController.post('/register', checkInputs, async function(req, res) {
     const body = req.body;
     
     try {
+        if(await User.usernameTaken(body.username)) return apiResp["USERNAME_IS_TAKEN"](res);
+        if(await User.emailTaken(body.email)) return apiResp["EMAIL_IS_TAKEN"](res);
+
         const userCreation = new User({
             username: body.username,
             password: body.password,
@@ -44,6 +47,8 @@ userController.post('/login', checkInputs, async function(req, res) {
 
     try {
         const targetUser = await User.findUser(body.username);
+        if(!targetUser) return apiResp["USER_NOT_FOUND"](res);
+        
         const correctPassword = await targetUser.passwordMatch(body.password);
 
         if(!correctPassword) return apiResp["USER_NOT_FOUND"](res);
@@ -52,18 +57,11 @@ userController.post('/login', checkInputs, async function(req, res) {
         if(session.loggedIn) return apiResp["INVALID_DATA"](res);
 
         session.loggedIn = true;
+        session.name = targetUser.username;
         session.role = targetUser.role;
 
         res.json(session);
     } catch(err) {
         return apiResp["INVALID_DATA"](res);
     }
-});
-
-userController.post('/logout', checkAuth, async function(req, res) {
-    req.session.destroy(function(err) {
-        if(err) return apiResp["INVALID_DATA"](res);
-
-        res.redirect('/login');
-    });
 });
