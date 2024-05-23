@@ -46,6 +46,25 @@ p {
     align-items: center;
 }
 
+input[type='submit'] {
+    cursor: pointer;
+    
+    border-radius: 20px;
+
+    color: white;
+    background-color: #76ABAE;
+    
+    border: 0;
+
+    opacity: 0.9;
+
+    transition: opacity 0.3s;
+}
+
+input[type='submit']:hover {
+    opacity: 1;
+}
+
 /* Notification System */
 .notification-container {
     direction: ltr;
@@ -105,8 +124,6 @@ p {
 
     width: 70%;
 }
-
-
 
 /* Successfull Notification */
 #notification-message.success {

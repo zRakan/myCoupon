@@ -1,0 +1,83 @@
+<%- include('./header.ejs'); %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+
+    <section>
+        <style>
+            #creation-container {
+                width: 400px;
+                height: 300px;
+                border-radius: 20px;
+
+                display: flex;
+
+                align-items: center;
+                flex-direction: column;
+
+                background-color: white;
+            }
+
+            #creation-container > h2 {
+                margin-bottom: 50px;
+            }
+
+            #create-form {
+                display: flex;
+                flex-direction: column;
+
+                row-gap: 10px;
+
+                height: 60%;
+            }
+
+            #create-form > div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #create-form > input[type='submit'] {
+                width: 80px;
+                height: 35px;
+                font-size: 20px;
+
+                margin: auto;
+            }
+        </style>
+
+        <div class="center">
+            <div id="creation-container">
+                <h2>إضافة متجر جديد</h2>
+
+                <form id="create-form" action="/store/create" method="POST" enctype="multipart/form-data">
+                    <div id="create-name">
+                        <label for="name">اسم المتجر</label>
+                        <input name="name" placeholder="اسم المتجر" required>
+                    </div>
+
+                    <div id="create-img">
+                        <label>صورة المتجر</label>
+                        <input dir="ltr" type="file" name="img" accept="image/*" required>
+                    </div>
+
+                    <input type="submit" value="تأكيد">
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector("#create-form");
+
+            form.addEventListener("submit", function(event) {
+                //event.preventDefault();
+            })
+        });
+    </script>
+</body>
+
+<%- include('./footer.ejs'); %>

@@ -19,7 +19,18 @@
                 color: white;
             }
 
-            #store-container > p {
+            #header-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            #header-container > a {
+                position: absolute;
+                left: 0;
+            }
+
+            #header-container > p {
                 font-size: 30px;
             }
 
@@ -78,7 +89,14 @@
 
         <p id="greeting-user">اهلًا بك، <span style="font-weight: bold;"><%= user.name || "زائر" %></span></p>
         <div id="store-container">
-            <p>قائمة المتاجر</p>
+            <div id="header-container">
+                <p>قائمة المتاجر</p>
+
+                <% if(user.role == 'admin') { %>
+                    <a href="/store/create"><i id="edit-store" class="bi bi-plus-circle" style="color: aqua; font-size: 24px;"></i></a>
+                <% } %>
+            </div>
+
 
             <% if(stores.length > 0) { %>
                 <div id="store-elements">
