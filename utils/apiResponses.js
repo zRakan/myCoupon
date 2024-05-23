@@ -8,8 +8,11 @@ const HTTP_CODES = {
 export default {
     "INVALID_DATA": function(res) { return res.status(HTTP_CODES['INPUT_ERROR']).send({ status: "error", message: "Invalid data" }) },
 
-    "USER_NOT_FOUND": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "Invalid Username/Password" }) },
+    "USER_NOT_FOUND": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "اسم مستخدم/كلمة مرور خاطئة" }) },
     
-    "COUPON_NOT_FOUND": function(res) { return res.status(HTTP_CODES['NOT_FOUND']).send({ status: "error", mesasge: "Coupon not found" }) },
-    "STORE_NOT_FOUND": function(res) { return res.status(HTTP_CODES['NOT_FOUND']).send({ status: "error", mesasge: "Store not found" })},
+    "COUPON_NOT_FOUND": function(res) { return res.status(HTTP_CODES['NOT_FOUND']).send({ status: "error", mesasge: "لم يتم العثور على كوبون الخصم" }) },
+    "STORE_NOT_FOUND": function(res) { return res.status(HTTP_CODES['NOT_FOUND']).send({ status: "error", mesasge: "لم يتم العثور على المتجر" })},
+
+    "USERNAME_IS_TAKEN": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "اسم مستخدم غير مُتّاح" })},
+    "EMAIL_IS_TAKEN": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "إيميل غير مُتّاح" })},
 }
