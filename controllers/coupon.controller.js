@@ -42,7 +42,6 @@ couponController.post('/add', checkInputs, checkAuth, async function(req, res) {
 
         return apiResp["COUPON_ACCEPTED"](res);
     } catch(err) {
-        console.log(err);
         return apiResp["INVALID_DATA"](res)
     }
 });
@@ -64,7 +63,6 @@ couponController.post('/accept', checkInputs, isAdmin, async function(req, res) 
     const body = req.body;
     
     try {
-        console.log(await Coupon.find({}));
         const couponTarget = await Coupon.findOne({ id: body.id });
         if(!couponTarget || couponTarget.length == 0) return apiResp["COUPON_NOT_FOUND"](res);
 

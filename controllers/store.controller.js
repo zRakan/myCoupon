@@ -78,7 +78,6 @@ storeController.post('/edit', isAdmin, UPLOAD.single('img'), async function(req,
 
         return res.redirect('/');
     } catch(err) {
-        console.log(err);
         return apiResp["INVALID_DATA"](res);
     }
 });
