@@ -53,7 +53,7 @@ couponController.post('/remove', checkInputs, isAdmin, async function(req, res) 
         const couponTarget = await Coupon.deleteOne({ id: body.id });
         if(!couponTarget || couponTarget.deletedCount == 0) return apiResp["COUPON_NOT_FOUND"](res);
         
-        res.json(couponTarget);
+        return apiResp["COUPON_REMOVED"](res);
     } catch(err){
         return apiResp["INVALID_DATA"](res);
     }

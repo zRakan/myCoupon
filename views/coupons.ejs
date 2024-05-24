@@ -83,7 +83,7 @@
         <div class="center">
             <div id="store-container">
                 <img src="<%=store.img%>">
-                <p><%= store.name %><br>عدد الكوبونات: <%= coupons.length %></p>
+                <p><%= store.name %><br>عدد الكوبونات: <span id="coupons-number"><%= coupons.length %></span></p>
 
                 <% if(user.role) { %>
                     <a href="<%= store.id %>/add"><button style="width: 150px; height: 30px;">إضافة كوبون جديد</button></a>
@@ -93,7 +93,7 @@
             <% if(coupons.length > 0) { %>
                 <div id="coupons-list">
                     <% for(let coupon of coupons) { %>
-                        <div id="coupon-info" data-coupon="<%=coupon.code%>">
+                        <div id="coupon-info" data-coupon="<%= coupon.code %>" data-id="<%= coupon.id %>">
                             <div id="percentage">
                                 <span><%= coupon.percentage %>%</span>
                             </div>
@@ -131,13 +131,50 @@
             }
         }
 
+        const isAdmin = <%= user.role == 'admin' %>;
         document.addEventListener('DOMContentLoaded', function() {
             const couponsList = document.querySelectorAll('#coupon-info');
+            const couponsNumber = document.querySelector('#coupons-number');
 
+            let sure = false;
             for(let couponElement of couponsList) {
-                couponElement.addEventListener('click', function() {
-                    copyToClipboard(couponElement.getAttribute('data-coupon'));
-                    showNotification("تم نسخ كوبون الخصم بنجاح", 'success');
+                const couponId = couponElement.getAttribute('data-id');
+
+                couponElement.addEventListener('click', async function() {
+                    if(isAdmin && window.event.shiftKey) {
+                        if(!sure) {
+                            sure = true;
+                            interval = setTimeout(function() {
+                                sure = false;
+                            }, 1500)
+
+                            return showNotification("هل انت متأكد؟ قم بالنقر على الزر مرة اخرى", "warning")
+                        }
+
+                        clearInterval(interval);
+                        interval = null;
+
+                        let resp = await fetch('/coupon/remove', {
+                            method: "POST",
+                            headers: { 'Content-Type': 'application/json' },
+
+                            body: JSON.stringify({ id: couponId }),
+                        });
+                        resp = await resp.json();
+
+                        if(resp.status == 'error') showNotification(resp.message, 'error')
+                        else {
+                            showNotification(resp.message, 'success');
+                            
+                            couponElement.remove();
+                            couponsNumber.innerHTML = (+couponsNumber.innerHTML)-1;
+
+                            sure = false;
+                        }
+                    } else {
+                        copyToClipboard(couponElement.getAttribute('data-coupon'));
+                        showNotification("تم نسخ كوبون الخصم بنجاح", 'success');
+                    }
                 });
             }
         });

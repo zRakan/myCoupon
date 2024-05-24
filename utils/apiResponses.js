@@ -21,5 +21,6 @@ export default {
     "LOGOUT_SUCCESS": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم تسجيل الخروج بنجاح" }) },
 
     "COUPON_ADDED": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم إضافة كوبون الخصم بنجاح" }) },
+    "COUPON_REMOVED": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم حذف كوبون الخصم بنجاح" }) },
     "COUPON_ACCEPTED": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم قبول كود الخصم بنجاح" }) }
 }

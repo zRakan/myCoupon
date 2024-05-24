@@ -54,7 +54,7 @@ app.get('/coupons/:store_id', async function(req, res) {
     const targetStore = await Store.findOne({ id: storeId }).select("id name img -_id")
     if(!targetStore) return res.redirect('/');
 
-    const couponsList = await Coupon.find({ belongs: storeId, accepted: true }).select("code description percentage -_id");
+    const couponsList = await Coupon.find({ belongs: storeId, accepted: true }).select("id code description percentage -_id");
 
     res.render('coupons', { title: targetStore.name, user: req.session, store: targetStore, coupons: couponsList });
 });
