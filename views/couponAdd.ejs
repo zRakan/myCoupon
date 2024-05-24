@@ -1,0 +1,124 @@
+<%- include('./header.ejs'); %>
+
+<body>
+    <%- include('./navbar.ejs') %>
+
+    <section>
+        <style>
+            #creation-container {
+                width: 400px;
+                height: 300px;
+                border-radius: 20px;
+
+                display: flex;
+
+                align-items: center;
+                flex-direction: column;
+
+                background-color: white;
+            }
+
+            #creation-container > h2 {
+                margin-bottom: 50px;
+            }
+
+            #create-form {
+                display: flex;
+                flex-direction: column;
+
+                row-gap: 10px;
+
+                width: 80%;
+                height: 70%;
+            }
+
+            #create-form > div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #create-form > input[type='submit'] {
+                width: 80px;
+                height: 35px;
+                font-size: 20px;
+
+                margin: auto;
+            }
+        </style>
+
+        <div class="center">
+            <div id="creation-container">
+                <h2>إضافة كوبون جديد</h2>
+
+                <form id="create-form" action="/coupon/add" method="POST">
+                    <input type="text" name="belongs" value="<%= store.id %>" style="display: none;">
+                    
+                    <div id="create-code">
+                        <label for="code">كوبون الخصم</label>
+                        <input name="code" placeholder="كوبون الخصم" required>
+                    </div>
+
+                    <div id="create-percentage">
+                        <label for="percentage">قيمة الخصم</label>
+                        <input type="number" name="percentage" min="1" max="100" required>
+                    </div>
+
+                    <div id="create-description">
+                        <label for="description">وصف الخصم</label>
+                        <input type="text" name="description" placeholder="وصف لنوع الخصم (إختياري)">
+                    </div>
+
+                    <input type="submit" value="تأكيد">
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector("#create-form");
+
+            const storeId = "<%= store.id %>";
+            const couponInput = form.querySelector('#create-code > input');
+            const percentageInput = form.querySelector('#create-percentage > input');
+            const descriptionInput = form.querySelector('#create-description > input');
+
+            let submitted = false;
+            form.addEventListener("submit", async function(event) {
+                event.preventDefault();
+                if(submitted) return;
+                submitted = true;
+
+
+
+                let resp = await fetch('/coupon/add', {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+
+                    body: JSON.stringify({
+                        code: couponInput.value,
+                        percentage: percentageInput.value,
+                        belongs: storeId,
+                        descirption: descriptionInput.value
+                    })
+                });
+
+                resp = await resp.json();
+                if(resp.status == 'error') return showNotification(resp.message, 'failed');
+                else {
+                    showNotification(resp.message, 'success');
+                    
+                    setTimeout(function() {
+                        window.location = '/coupons/<%= store.id %>'
+                    }, 1000)
+                    
+                }
+            })
+        });
+    </script>
+</body>
+
+<%- include('./footer.ejs'); %>

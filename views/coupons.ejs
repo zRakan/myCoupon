@@ -18,6 +18,8 @@
                 align-items: center;
 
                 flex-direction: column;
+
+                padding-bottom: 20px;
             }
 
             #store-container p {
@@ -82,6 +84,10 @@
             <div id="store-container">
                 <img src="<%=store.img%>">
                 <p><%= store.name %><br>عدد الكوبونات: <%= coupons.length %></p>
+
+                <% if(user.role) { %>
+                    <a href="<%= store.id %>/add"><button style="width: 150px; height: 30px;">إضافة كوبون جديد</button></a>
+                <% } %>
             </div>
 
             <% if(coupons.length > 0) { %>

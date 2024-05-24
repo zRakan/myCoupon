@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 
 // Import utilities
-import { isAdmin, log } from './utils/index.js';
+import { checkAuth, isAdmin, log } from './utils/index.js';
 
 const app = express();
 
@@ -57,7 +57,17 @@ app.get('/coupons/:store_id', async function(req, res) {
     const couponsList = await Coupon.find({ belongs: storeId, accepted: true }).select("code description percentage -_id");
 
     res.render('coupons', { title: targetStore.name, user: req.session, store: targetStore, coupons: couponsList });
-})
+});
+
+app.get('/coupons/:store_id/add', checkAuth, async function(req, res) {
+    const storeId = req.params.store_id;
+    if(!storeId) return res.redirect('/')
+
+    const targetStore = await Store.findOne({ id: storeId }).select("id name img -_id")
+    if(!targetStore) return res.redirect('/');
+
+    res.render('couponAdd', { title: "إضافة كوبون خصم جديد", user: req.session, store: targetStore });
+});
 
 app.get('/login', function(req, res) {
     if(req.session.loggedIn) return res.redirect('/');
