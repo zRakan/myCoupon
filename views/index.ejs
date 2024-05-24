@@ -107,7 +107,7 @@
                         
                         <div id="actions" data-id="<%= element.id %>">
                             <% if(user.role == 'admin') { %>
-                                <a href="#"><i id="edit-store" class="bi bi-pencil-square" style="color: orange; font-size: 40px;"></i></a>
+                                <a href="/store/edit/<%= element.id %>"><i id="edit-store" class="bi bi-pencil-square" style="color: orange; font-size: 40px;"></i></a>
                                 <a href="#"><i id="remove-store" class="bi bi-trash3" style="color: darkred; font-size: 40px;"></i></a>
                             <% } %>
 

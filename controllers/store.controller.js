@@ -17,6 +17,15 @@ storeController.get('/create', isAdmin, async function(req, res) {
     res.render('storeCreation', { title: "انشاء متجر جديد", user: req.session });
 });
 
+storeController.get('/edit/:store_id', isAdmin, async function(req, res) {
+    const storeId = req.params.store_id;
+    if(!storeId) return res.redirect('/');
+
+    const targetStore = await Store.findOne({ id: storeId }).select('name id -_id');
+
+    res.render('storeEditor', { title: "تعديل المتجر", user: req.session, store: targetStore });
+});
+
 // Import multer & path
 import fs from 'fs/promises';
 import multer from 'multer';
@@ -47,6 +56,29 @@ storeController.post('/create', isAdmin, UPLOAD.single('img'), async function(re
 
         return res.redirect('/');
     } catch(err) {
+        return apiResp["INVALID_DATA"](res);
+    }
+});
+
+storeController.post('/edit', isAdmin, UPLOAD.single('img'), async function(req, res) {
+    const body = req.body;
+    const file = req.file;
+
+    try {
+        // Remove old logo of the removed store
+        const targetStore = await Store.findOne({ id: body.id }).select("img -_id");
+        const IMG_PATH = `.${targetStore.img}`;
+
+        await fs.unlink(IMG_PATH);
+
+        await Store.updateOne({ id: body.id }, {
+            name: body.name,
+            img: `/static/assets/images/${file.filename}`
+        });
+
+        return res.redirect('/');
+    } catch(err) {
+        console.log(err);
         return apiResp["INVALID_DATA"](res);
     }
 });
