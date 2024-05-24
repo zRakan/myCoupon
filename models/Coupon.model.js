@@ -41,7 +41,7 @@ couponsSchema.methods.acceptCoupon = function() {
     this.accepted = true;
 }
 
-couponsSchema.pre('save', async function() {
+couponsSchema.pre('save', function() {
     if(this.isNew)
         this.id = uniqueId(10);
 });
