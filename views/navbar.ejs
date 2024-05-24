@@ -16,21 +16,21 @@
             color: white;
         }
 
-        #logo {
+        #nav #logo {
             width: 200px;
         }
     
-        #elements {
+        #nav #elements {
             display: flex;
             align-items: center;
             column-gap: 10px;
         }
     
-        p a, a i {
+        #nav p a, #nav a i {
             transition: color 0.3s;
         }
 
-        p a:hover, a i:hover {
+        #nav p a:hover, #nav a i:hover {
             color: #76ABAE;
         }
     </style>
@@ -46,12 +46,26 @@
                     <a href="/couponsList"><i class="bi bi-shield-fill-check" style="font-size: 32px"></i></a>
                 <% } %>
 
-                <p style="color: red;"><a href="/logout">تسجيل الخروج</a></p>
+                <p id="logoutBtn" style="color: red;"><a href="#">تسجيل الخروج</a></p>
             <% } else { %>
                 <p><a href="/login">تسجيل الدخول</a></p>
             <% } %>
 
         </div>
-
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const logoutBtn = document.querySelector('#logoutBtn');
+
+            logoutBtn.addEventListener('click', async function() {
+                let resp = await fetch('/user/logout', {
+                    method: "POST"
+                });
+                    resp = await resp.json();
+
+                if(resp.status == 'success') window.location = '/';
+            });
+        });
+    </script>
 </section>

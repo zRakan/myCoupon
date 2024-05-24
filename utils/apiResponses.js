@@ -1,4 +1,5 @@
 const HTTP_CODES = {
+    "OK": 200,
     "INPUT_ERROR": 400,
     "AUTHORIZATION": 401,
     "NOT_ADMIN": 403,
@@ -15,4 +16,7 @@ export default {
 
     "USERNAME_IS_TAKEN": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "اسم مستخدم غير مُتّاح" })},
     "EMAIL_IS_TAKEN": function(res) { return res.status(HTTP_CODES['AUTHORIZATION']).send({ status: "error", message: "إيميل غير مُتّاح" })},
+
+    "LOGIN_SUCCESS": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم تسجيل الدخول بنجاح" }) },
+    "LOGOUT_SUCCESS": function(res) { return res.status(HTTP_CODES['OK']).send({ status: 'success', message: "تم تسجيل الخروج بنجاح" }) },
 }

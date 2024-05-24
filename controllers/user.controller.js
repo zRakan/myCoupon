@@ -42,6 +42,12 @@ userController.post('/register', checkInputs, async function(req, res) {
     }
 });
 
+userController.post('/logout', checkAuth, async function(req, res) {
+    req.session.destroy(function(err) {
+        return apiResp['LOGOUT_SUCCESS'](res);
+    });
+});
+
 userController.post('/login', checkInputs, async function(req, res) {
     const body = req.body;
 

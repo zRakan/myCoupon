@@ -71,11 +71,7 @@ app.get('/register', function(req, res) {
     res.render('authentication', { title: "تسجيل حساب", user: req.session });
 });
 
-app.get('/logout', function(req, res) {
-    req.session.destroy(function(err) {
-        res.redirect('/');
-    });
-});
+
 
 // Controller
 import { couponController, storeController, userController } from './controllers/index.js';
