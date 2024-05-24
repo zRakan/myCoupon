@@ -46,7 +46,7 @@ p {
     align-items: center;
 }
 
-input[type='submit'] {
+input[type='submit'], button {
     cursor: pointer;
     
     border-radius: 20px;
