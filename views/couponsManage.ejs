@@ -91,7 +91,7 @@
                 <% if(couponsList.length > 0) { %>
                     <div id="coupons-list">
                         <% for(let coupon of couponsList) { %>
-                            <div id="coupon-info" data-coupon="<%=coupon.code%>">
+                            <div id="coupon-info" data-coupon="<%= coupon.id %>">
                                 <img src="<%= stores[coupon.belongs].img %>">
                                 
                                 <p>"<%= coupon.description || "لا يوجد وصف لكوبون الخصم" %>"
@@ -109,6 +109,50 @@
                 <% } %>
             </div>
         </div>
-
     </section>
+
+    <%- include('./notification.ejs'); %>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const couponElements = document.querySelectorAll("#coupon-info");
+
+            let sure = false;
+            let interval
+
+            for(let couponElement of couponElements) {
+                const couponId = couponElement.getAttribute('data-coupon');
+
+                couponElement.addEventListener('click', async function() {
+
+                    if(!sure) {
+                        sure = true;
+                        interval = setTimeout(function() {
+                            sure = false;
+                        }, 1500)
+
+                        return showNotification("هل انت متأكد؟ قم بالنقر على الزر مرة اخرى", "warning")
+                    }
+
+                    clearInterval(interval);
+                    interval = null;
+
+                    let resp = await fetch('/coupon/accept', {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+
+                        body: JSON.stringify({ id: couponId }),
+                    });
+
+                    resp = await resp.json();
+                    if(resp.status == 'error') return showNotification(resp.message, 'failed');
+                    else {
+                        showNotification(resp.message, 'success');
+                        couponElement.remove();
+                        sure = false
+                    }
+                });
+            }
+        });
+    </script>
 </body>
